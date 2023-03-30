@@ -2,3 +2,5 @@
 /__pycache__/
 /tools/database/__pycache__/
 /tools/webscraping/__pycache__/
+/tools/database/YTvideos.db
+/tools/database/YTviewers.db
