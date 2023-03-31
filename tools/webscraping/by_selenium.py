@@ -88,20 +88,25 @@ class CountYoutubeViewers(object):
             return [year_mo_day, hr_min, status, viewers]
 
 
-    def get_iconImageURL(self) -> str:
-        try:
-            icon = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((
-                By.XPATH, '//a[@class="yt-simple-endpoint style-scope ytd-video-owner-renderer"]/yt-img-shadow/img[@id="img"]')))
-            # Scroll to view element.
-            self.driver.execute_script("arguments[0].scrollIntoView();", icon)
-            # JavaScript code to display the element.
-            script = 'arguments[0].style.display="block";'
-            self.driver.execute_script(script, icon)
-            icon_url = icon.get_attribute('src')
+def get_iconImageURL(URL: str) -> str:
 
-            return icon_url
-        except:
-            return False
+    driver = webdriver.Chrome(service=service, options=chrome_options)
+
+    try:
+        driver.get(URL)
+        icon = WebDriverWait(driver, 10).until(EC.presence_of_element_located((
+            By.XPATH, '//a[@class="yt-simple-endpoint style-scope ytd-video-owner-renderer"]/yt-img-shadow/img[@id="img"]')))
+        # Scroll to view element.
+        driver.execute_script("arguments[0].scrollIntoView();", icon)
+        # JavaScript code to display the element.
+        script = 'arguments[0].style.display="block";'
+        driver.execute_script(script, icon)
+        icon_url = icon.get_attribute('src')
+        return icon_url
+    except:
+        return False
+    finally:
+        driver.quit()
 
 
 def isItLiveStream(URL: str) -> List[bool]:
@@ -133,5 +138,5 @@ if __name__ == "__main__":
     # num = YT.get_viewers()
     # print(num)
 
-    L = isItLiveStream("https://www.youtube.com/watch?v=_i3BhJKozjw")
+    L = get_iconImageURL("https://www.youtube.com/watch?v=_i3BhJKozjw")
     print(L)

@@ -58,6 +58,10 @@ async def notify(request: Request, response: Response) -> Response:
 
     # isTiLiveStream returns List[iswatching, iswaiting].
     isStreamList = by_selenium.isItLiveStream(videoURL)
+    IconImageURL = by_selenium.get_iconImageURL(videoURL)
+    if not IconImageURL:
+        IconImageURL = "https://yt3.googleusercontent.com/ytc/AL5GRJVxGt3eeqz_AHd26Oncs9Of9ZHWk9OyjSV0-lybGw=s176-c-k-c0x00ffffff-no-rj"
+
     print("----------------------")
     print(entry_element)
     print(videoID)
@@ -65,11 +69,12 @@ async def notify(request: Request, response: Response) -> Response:
     print(videoTitle)
     print(videoURL)
     print(isStreamList)
+    print(IconImageURL)
     print("----------------------")
 
     if isStreamList[0] or isStreamList[1]:
         try:
-            videosDB.insert_videoRecord(videoID, channelID, videoTitle, videoURL, "<IconImageURL>")
+            videosDB.insert_videoRecord(videoID, channelID, videoTitle, videoURL, IconImageURL)
             print("ライブ配信の情報格納完了。")
 
             # excute subprocess
