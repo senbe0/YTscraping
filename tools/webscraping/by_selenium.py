@@ -50,6 +50,14 @@ class CountYoutubeViewers(object):
             return False
 
 
+    def _IsItMemberOnly(self):
+        try:
+            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, '//div[@class="html5-ypc-title"]')))
+            return True
+        except:
+            return False
+
+
     def get_viewers(self):
         self.driver.implicitly_wait(0.5)
 
@@ -58,7 +66,11 @@ class CountYoutubeViewers(object):
             self.driver.quit()
             return None
 
-        if not self._IsItLiveStream:
+        if not self._IsItLiveStream():
+            self.driver.quit()
+            return None
+
+        if self._IsItMemberOnly():
             self.driver.quit()
             return None
 
@@ -138,5 +150,5 @@ if __name__ == "__main__":
     # num = YT.get_viewers()
     # print(num)
 
-    L = get_iconImageURL("https://www.youtube.com/watch?v=_i3BhJKozjw")
+    L = isItLiveStream("https://www.youtube.com/watch?v=qWOn_IHG81k&ab_channel=Irohach.%E9%A2%A8%E7%9C%9F%E3%81%84%E3%82%8D%E3%81%AF-holoX-")
     print(L)
