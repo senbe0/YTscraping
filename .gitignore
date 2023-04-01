@@ -1,4 +1,5 @@
 /.env
+/app.log
 /__pycache__/
 /tools/database/__pycache__/
 /tools/webscraping/__pycache__/
