@@ -160,10 +160,21 @@ def isItLiveStream(URL: str) -> List[bool]:
 
 
 if __name__ == "__main__":
+    import time
     # YT = CountYoutubeViewers("4J0NTMAsUpk")
     # num = YT.get_viewers()
     # print(num)
+    # isSuccess = False
+    # count = 5
+    # while not isSuccess and count > 0:
+    #     IconImageURL = get_iconImageURL("https://www.youtube.com/watch?v=pyqdb1Any24&ab_channel=%E5%AE%87%E6%8E%A8%E3%81%8F%E3%82%8A%E3%81%82-%E2%98%85ClearRocketch.%E2%98%85-")
+    #     if IconImageURL:
+    #         isSuccess = True
+    #     count -= 1
+    #     time.sleep(3)
 
-    # L = _IsItpremiumVideo("https://www.youtube.com/watch?v=48V43w_mErk")
-    # print(L)
+    # if not IconImageURL:
+    #     IconImageURL = "https://yt3.googleusercontent.com/ytc/AL5GRJVxGt3eeqz_AHd26Oncs9Of9ZHWk9OyjSV0-lybGw=s176-c-k-c0x00ffffff-no-rj"
+
+    # print(IconImageURL)
     pass

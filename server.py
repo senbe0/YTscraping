@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request, Response, status
 import xml.etree.ElementTree as ET
 import subprocess
+import time
 import sys
 import os
 
@@ -58,21 +59,31 @@ async def notify(request: Request, response: Response) -> Response:
 
     # isTiLiveStream returns List[iswatching, iswaiting].
     isStreamList = by_selenium.isItLiveStream(videoURL)
-    IconImageURL = by_selenium.get_iconImageURL(videoURL)
-    if not IconImageURL:
-        IconImageURL = "https://yt3.googleusercontent.com/ytc/AL5GRJVxGt3eeqz_AHd26Oncs9Of9ZHWk9OyjSV0-lybGw=s176-c-k-c0x00ffffff-no-rj"
 
-    print("----------------------")
-    print(entry_element)
-    print(videoID)
-    print(channelID)
-    print(videoTitle)
-    print(videoURL)
-    print(isStreamList)
-    print(IconImageURL)
-    print("----------------------")
 
     if isStreamList[0] or isStreamList[1]:
+        isSuccess = False
+        count = 5
+        while not isSuccess and count > 0:
+            IconImageURL = by_selenium.get_iconImageURL(videoURL)
+            if IconImageURL:
+                isSuccess = True
+            count -= 1
+            time.sleep(3)
+
+        if not IconImageURL:
+            IconImageURL = "https://yt3.googleusercontent.com/ytc/AL5GRJVxGt3eeqz_AHd26Oncs9Of9ZHWk9OyjSV0-lybGw=s176-c-k-c0x00ffffff-no-rj"
+
+        print("----------------------")
+        print(entry_element)
+        print(videoID)
+        print(channelID)
+        print(videoTitle)
+        print(videoURL)
+        print(isStreamList)
+        print(IconImageURL)
+        print("----------------------")
+
         try:
             videosDB.insert_videoRecord(videoID, channelID, videoTitle, videoURL, IconImageURL)
             print("ライブ配信の情報格納完了。")
