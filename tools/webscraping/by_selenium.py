@@ -52,10 +52,20 @@ class CountYoutubeViewers(object):
 
     def _IsItMemberOnly(self):
         try:
-            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, '//div[@class="html5-ypc-title"]')))
+            WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, '//div[@class="html5-ypc-title"]')))
             return True
         except:
             return False
+
+
+    def _IsItpremiumVideo(self):
+        try:
+            element = WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, "//div[contains(@class, 'ytp-offline-slate-main-text') and contains(text(), 'Premieres in')]")))
+            return True
+        except:
+            return False
+
+
 
 
     def get_viewers(self):
@@ -71,6 +81,10 @@ class CountYoutubeViewers(object):
             return None
 
         if self._IsItMemberOnly():
+            self.driver.quit()
+            return None
+        
+        if self._IsItpremiumVideo():
             self.driver.quit()
             return None
 
@@ -150,5 +164,6 @@ if __name__ == "__main__":
     # num = YT.get_viewers()
     # print(num)
 
-    L = isItLiveStream("https://www.youtube.com/watch?v=qWOn_IHG81k&ab_channel=Irohach.%E9%A2%A8%E7%9C%9F%E3%81%84%E3%82%8D%E3%81%AF-holoX-")
-    print(L)
+    # L = _IsItpremiumVideo("https://www.youtube.com/watch?v=48V43w_mErk")
+    # print(L)
+    pass
