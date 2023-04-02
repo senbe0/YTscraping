@@ -99,16 +99,19 @@ async def notify(request: Request, response: Response) -> Response:
             "iconImageURL": iconImageURL
         }
 
-        try:
-            response = requests.post(databaseAPI_url + "/videosDB/insert", json=record)
-            print(response.json())
-            print("ライブ配信の情報格納完了。")
+        response = requests.post(databaseAPI_url + "/videosDB/insert", json=record)
+        response = response.json()
+        status = response["status"]
+        if status == "failure":
+            print(f"May be same video:  videosDB 'status is{status}'")
+        else:
+            print(f"videosDB 'status is {status}'")
 
             # excute subprocess
             excute_subprocess(videoID)
 
-            print("サブプロセス、excute完了。")
-        except Exception as e:
-            print(f"maybe same video id: {e}")
+            print("Subprocess has benn excuted。")
+  
+
     print(isStreamList)
     return Response(status_code=status.HTTP_200_OK, media_type="text/plain")

@@ -38,13 +38,12 @@ def save_viewers_per_minute(videoID):
         "tableName": table_name
     }
 
-    try:
-        # Create a Viewers table
-        response = requests.post(databaseAPI_url + "/viewersDB/createTable", json=info)
-        logger.info(f"--info,createTable-- {response.json()}")
-
-    except Exception as e:
-        logger.error(f"::err,createTable::   {e}   ::")
+    # Create a Viewers table
+    response = requests.post(databaseAPI_url + "/viewersDB/createTable", json=info)
+    response = response.json()
+    status = response["status"]
+    if status == "failure":
+        logger.error(f"ERR ::create table into viewersDB:: {status}")
 
     count_viewers = by_selenium.CountYoutubeViewers(videoID)
 
@@ -52,17 +51,19 @@ def save_viewers_per_minute(videoID):
         data = count_viewers.get_viewers()
 
         if not data:
-            try:
-                info = {"videoID": videoID}
-                response = requests.post(databaseAPI_url + "/videosDB/delete", json=info)
-                logger.info(f"--info,deleteTable-- {response.json()}")
+            info = {"videoID": videoID}
+            response = requests.post(databaseAPI_url + "/videosDB/delete", json=info)
+            response = response.json()
+            status = response["status"]
+            if status == "failure":
+                logger.error(f"ERR ::delete table from videosDB:: {status}")
 
-                info = {"tableName": table_name}
-                response = requests.post(databaseAPI_url + "/viewersDB/delete", json=info)
-                logger.info(f"--info,deleteTable-- {response.json()}")
-
-            except Exception as e:
-                logger.error(f"::err,createTable::   {e}   ::")
+            info = {"tableName": table_name}
+            response = requests.post(databaseAPI_url + "/viewersDB/delete", json=info)
+            response = response.json()
+            status = response["status"]
+            if status == "failure":
+                logger.error(f"ERR ::delete table from viewersDB:: {status}")
 
             break
 
@@ -74,13 +75,14 @@ def save_viewers_per_minute(videoID):
             "viewers": viewers
         }
 
-        try:
-            # Insert viewer count records into the database
-            response = requests.post(databaseAPI_url + "/viewersDB/insert", json=info)
-            logger.info(f"--info,deleteTable-- {response.json()}")
+        # Insert viewer count records into the database
+        response = requests.post(databaseAPI_url + "/viewersDB/insert", json=info)
+        response = response.json()
+        status = response["status"]
+        if status == "failure":
+            logger.error(f"ERR ::insert record into viewersDB:: {status}")
 
-        except Exception as e:
-            logger.error(f"::err,insertRecord::   {e}   ::")
+  
 
         # Data acquisition every minute
         time.sleep(60)
