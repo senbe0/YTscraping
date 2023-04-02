@@ -41,9 +41,9 @@ def save_viewers_per_minute(videoID):
     # Create a Viewers table
     response = requests.post(databaseAPI_url + "/viewersDB/createTable", json=info)
     response = response.json()
-    status = response["status"]
-    if status == "failure":
-        logger.error(f"ERR ::create table into viewersDB:: {status}")
+    TXstatus = response["status"]
+    if TXstatus == "failure":
+        logger.error(f"ERR ::create table into viewersDB:: {TXstatus}")
 
     count_viewers = by_selenium.CountYoutubeViewers(videoID)
 
@@ -54,16 +54,16 @@ def save_viewers_per_minute(videoID):
             info = {"videoID": videoID}
             response = requests.post(databaseAPI_url + "/videosDB/delete", json=info)
             response = response.json()
-            status = response["status"]
-            if status == "failure":
-                logger.error(f"ERR ::delete table from videosDB:: {status}")
+            TXstatus = response["status"]
+            if TXstatus == "failure":
+                logger.error(f"ERR ::delete table from videosDB:: {TXstatus}")
 
             info = {"tableName": table_name}
             response = requests.post(databaseAPI_url + "/viewersDB/delete", json=info)
             response = response.json()
-            status = response["status"]
-            if status == "failure":
-                logger.error(f"ERR ::delete table from viewersDB:: {status}")
+            TXstatus = response["status"]
+            if TXstatus == "failure":
+                logger.error(f"ERR ::delete table from viewersDB:: {TXstatus}")
 
             break
 
@@ -78,9 +78,9 @@ def save_viewers_per_minute(videoID):
         # Insert viewer count records into the database
         response = requests.post(databaseAPI_url + "/viewersDB/insert", json=info)
         response = response.json()
-        status = response["status"]
-        if status == "failure":
-            logger.error(f"ERR ::insert record into viewersDB:: {status}")
+        TXstatus = response["status"]
+        if TXstatus == "failure":
+            logger.error(f"ERR ::insert record into viewersDB:: {TXstatus}")
 
   
 

@@ -101,11 +101,11 @@ async def notify(request: Request, response: Response) -> Response:
 
         response = requests.post(databaseAPI_url + "/videosDB/insert", json=record)
         response = response.json()
-        status = response["status"]
-        if status == "failure":
-            print(f"May be same video:  videosDB 'status is{status}'")
+        TXstatus = response["status"]
+        if TXstatus == "failure":
+            print(f"May be same video:  videosDB 'status is{TXstatus}'")
         else:
-            print(f"videosDB 'status is {status}'")
+            print(f"videosDB 'status is {TXstatus}'")
 
             # excute subprocess
             excute_subprocess(videoID)
