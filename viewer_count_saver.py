@@ -56,14 +56,16 @@ def save_viewers_per_minute(videoID):
             response = response.json()
             TXstatus = response["status"]
             if TXstatus == "failure":
-                logger.error(f"ERR ::delete table from videosDB:: {TXstatus}")
+                ErrMsg = response["msg"]
+                logger.error(f"ERR ::delete table from videosDB:: {ErrMsg}")
 
             info = {"tableName": table_name}
             response = requests.post(databaseAPI_url + "/viewersDB/delete", json=info)
             response = response.json()
             TXstatus = response["status"]
             if TXstatus == "failure":
-                logger.error(f"ERR ::delete table from viewersDB:: {TXstatus}")
+                ErrMsg = response["msg"]
+                logger.error(f"ERR ::delete table from viewersDB:: {ErrMsg}")
 
             break
 
@@ -80,9 +82,9 @@ def save_viewers_per_minute(videoID):
         response = response.json()
         TXstatus = response["status"]
         if TXstatus == "failure":
-            logger.error(f"ERR ::insert record into viewersDB:: {TXstatus}")
+            ErrMsg = response["msg"]
+            logger.error(f"ERR ::insert record into viewersDB:: {ErrMsg}")
 
-  
 
         # Data acquisition every minute
         time.sleep(60)
