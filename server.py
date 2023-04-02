@@ -1,15 +1,21 @@
 from fastapi import FastAPI, Request, Response, status
+from dotenv import load_dotenv
 import xml.etree.ElementTree as ET
 import subprocess
+import requests
 import time
 import sys
 import os
 
-from .tools.database import videosDB
 from .tools.webscraping import by_selenium
 
 
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
+databaseAPI_url = os.environ.get("databaseAPI_url")
+
+
 app = FastAPI()
+
 
 def excute_subprocess(videoID):
 
@@ -64,15 +70,16 @@ async def notify(request: Request, response: Response) -> Response:
     if isStreamList[0] or isStreamList[1]:
         isSuccess = False
         count = 5
+        iconImageURL = ""
         while not isSuccess and count > 0:
-            IconImageURL = by_selenium.get_iconImageURL(videoURL)
-            if IconImageURL:
+            iconImageURL = by_selenium.get_iconImageURL(videoURL)
+            if iconImageURL:
                 isSuccess = True
             count -= 1
             time.sleep(3)
 
-        if not IconImageURL:
-            IconImageURL = "https://yt3.googleusercontent.com/ytc/AL5GRJVxGt3eeqz_AHd26Oncs9Of9ZHWk9OyjSV0-lybGw=s176-c-k-c0x00ffffff-no-rj"
+        if not iconImageURL:
+            iconImageURL = "https://yt3.googleusercontent.com/ytc/AL5GRJVxGt3eeqz_AHd26Oncs9Of9ZHWk9OyjSV0-lybGw=s176-c-k-c0x00ffffff-no-rj"
 
         print("----------------------")
         print(entry_element)
@@ -81,11 +88,20 @@ async def notify(request: Request, response: Response) -> Response:
         print(videoTitle)
         print(videoURL)
         print(isStreamList)
-        print(IconImageURL)
+        print(iconImageURL)
         print("----------------------")
 
+        record = {
+            "videoID": videoID,
+            "channelID": channelID,
+            "title": videoTitle,
+            "videoURL": videoURL,
+            "iconImageURL": iconImageURL
+        }
+
         try:
-            videosDB.insert_videoRecord(videoID, channelID, videoTitle, videoURL, IconImageURL)
+            response = requests.post(databaseAPI_url + "/videosDB/insert", json=record)
+            print(response.json())
             print("ライブ配信の情報格納完了。")
 
             # excute subprocess
