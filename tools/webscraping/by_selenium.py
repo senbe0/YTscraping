@@ -53,6 +53,11 @@ class CountYoutubeViewers(object):
     def _IsItMemberOnly(self):
         try:
             WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, '//div[@class="html5-ypc-title"]')))
+            xpath = '//*[@class="style-scope ytd-badge-supported-renderer"]/span[contains(text(), "Members only")]'
+            members_only_element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath)))
+            if members_only_element:
+                return True
+
             return True
         except:
             return False
@@ -64,8 +69,6 @@ class CountYoutubeViewers(object):
             return True
         except:
             return False
-
-
 
 
     def get_viewers(self):
