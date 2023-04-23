@@ -1,3 +1,8 @@
+"""
+This source code is under development.
+Please use "by_selenium" in the production environment.
+"""
+
 from requests_html import HTMLSession
 from datetime import datetime
 from typing import List
