@@ -52,12 +52,10 @@ class CountYoutubeViewers(object):
 
     def _IsItMemberOnly(self):
         try:
-            WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, '//div[@class="html5-ypc-title"]')))
             xpath = '//*[@class="style-scope ytd-badge-supported-renderer"]/span[contains(text(), "Members only")]'
-            members_only_element = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath)))
+            members_only_element = WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, xpath)))
             if members_only_element:
                 return True
-
             return True
         except:
             return False
@@ -100,6 +98,10 @@ class CountYoutubeViewers(object):
         viewers_str = elements[0].text
 
         # If Live Streaming has finished, the DRIVER will be terminated.
+        if viewers_str.split()[1] != "waiting" and viewers_str.split()[1] != "watching":
+            self.driver.quit()
+            return None
+
         if viewers_str.split()[3] == "Streamed":
             self.driver.quit()
             return None
@@ -164,8 +166,8 @@ def isItLiveStream(URL: str) -> List[bool]:
 
 if __name__ == "__main__":
     import time
-    # YT = CountYoutubeViewers("4J0NTMAsUpk")
-    # num = YT.get_viewers()
+    YT = CountYoutubeViewers("4J0NTMAsUpk")
+    num = YT.get_viewers()
     # print(num)
     # isSuccess = False
     # count = 5
