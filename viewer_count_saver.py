@@ -43,7 +43,8 @@ def save_viewers_per_minute(videoID):
     response = response.json()
     TXstatus = response["status"]
     if TXstatus == "failure":
-        logger.error(f"ERR ::create table into viewersDB:: {TXstatus}")
+        ErrorMsg = response["msg"]
+        logger.error(f"ERR ::create table into viewersDB:: {TXstatus}, {ErrorMsg}")
 
     count_viewers = by_selenium.CountYoutubeViewers(videoID)
 

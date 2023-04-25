@@ -103,7 +103,9 @@ async def notify(request: Request, response: Response) -> Response:
         response = response.json()
         TXstatus = response["status"]
         if TXstatus == "failure":
-            print(f"May be same video:  videosDB 'status is{TXstatus}'")
+            errorMsg = response["msg"]
+            print(f"Error insert video record:  videosDB \
+                  'status is{TXstatus}'. msg: {errorMsg}")
         else:
             print(f"videosDB 'status is {TXstatus}'")
 
