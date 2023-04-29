@@ -61,14 +61,6 @@ class CountYoutubeViewers(object):
             return False
 
 
-    def _IsItpremiumVideo(self):
-        try:
-            element = WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, "//div[contains(@class, 'ytp-offline-slate-main-text') and contains(text(), 'Premieres in')]")))
-            return True
-        except:
-            return False
-
-
     def get_viewers(self):
         self.driver.implicitly_wait(0.5)
 
@@ -82,10 +74,6 @@ class CountYoutubeViewers(object):
             return None
 
         if self._IsItMemberOnly():
-            self.driver.quit()
-            return None
-        
-        if self._IsItpremiumVideo():
             self.driver.quit()
             return None
 
@@ -105,6 +93,16 @@ class CountYoutubeViewers(object):
         if viewers_str.split()[3] == "Streamed":
             self.driver.quit()
             return None
+
+        # premiun video
+        # 8,231 watching now  Premiere in progress. Started 18 minutes ago
+        # 91 watching now  Premiered 62 minutes ago
+
+
+        if viewers_str.split()[3] == "Premiered":
+            self.driver.quit()
+            return None
+
         else:
             # Get num of viewers!
             status = viewers_str.split()[1]
