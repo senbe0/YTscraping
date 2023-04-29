@@ -106,9 +106,11 @@ async def notify(request: Request, response: Response) -> Response:
             errorMsg = response["msg"]
             print(f"Error insert video record:  videosDB \
                   'status is{TXstatus}'. msg: {errorMsg}")
-        else:
-            print(f"videosDB 'status is {TXstatus}'")
-
+        elif TXstatus == "update":
+            print("title has been updated")
+        elif TXstatus == "already":
+            print("already exist")
+        elif TXstatus == "success":
             # excute subprocess
             excute_subprocess(videoID)
 
