@@ -61,6 +61,16 @@ class CountYoutubeViewers(object):
             return False
 
 
+    def _IsItprivate(self):
+        try:
+            video_unavailable_element = WebDriverWait(self.driver, 3).until(
+                EC.presence_of_element_located(
+                (By.XPATH, '//div[@class="ytp-error-content-wrap-reason"]/span[text()="This video is unavailable"]')))
+            return True
+        except:
+            return False
+
+
     def get_viewers(self):
         self.driver.implicitly_wait(0.5)
 
@@ -77,6 +87,9 @@ class CountYoutubeViewers(object):
             self.driver.quit()
             return None
 
+        if self._IsItprivate():
+            self.driver.quit()
+            return None
 
         # Here is an example of the contents of viewers_str.
         # 1 waiting  Scheduled for Mar 13, 2023
@@ -163,21 +176,8 @@ def isItLiveStream(URL: str) -> List[bool]:
 
 
 if __name__ == "__main__":
-    import time
-    YT = CountYoutubeViewers("4J0NTMAsUpk")
-    num = YT.get_viewers()
-    # print(num)
-    # isSuccess = False
-    # count = 5
-    # while not isSuccess and count > 0:
-    #     IconImageURL = get_iconImageURL("https://www.youtube.com/watch?v=pyqdb1Any24&ab_channel=%E5%AE%87%E6%8E%A8%E3%81%8F%E3%82%8A%E3%81%82-%E2%98%85ClearRocketch.%E2%98%85-")
-    #     if IconImageURL:
-    #         isSuccess = True
-    #     count -= 1
-    #     time.sleep(3)
-
-    # if not IconImageURL:
-    #     IconImageURL = "https://yt3.googleusercontent.com/ytc/AL5GRJVxGt3eeqz_AHd26Oncs9Of9ZHWk9OyjSV0-lybGw=s176-c-k-c0x00ffffff-no-rj"
-
-    # print(IconImageURL)
+    # import time
+    # YT = CountYoutubeViewers("")
+    # ans = YT._IsItprivate()
+    # print(ans)
     pass
