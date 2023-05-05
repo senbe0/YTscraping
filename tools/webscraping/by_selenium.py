@@ -63,9 +63,9 @@ class CountYoutubeViewers(object):
 
     def _IsItprivate(self):
         try:
-            video_unavailable_element = WebDriverWait(self.driver, 3).until(
-                EC.presence_of_element_located(
-                (By.XPATH, '//div[@class="ytp-error-content-wrap-reason"]/span[text()="This video is unavailable"]')))
+            WebDriverWait(self.driver, 3).until(
+                EC.presence_of_element_located((By.XPATH, '//div[contains(@class, "ytp-error-content-wrap-reason")]/span[text()="Video unavailable"]'))
+            )
             return True
         except:
             return False
