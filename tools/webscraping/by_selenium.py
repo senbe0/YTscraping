@@ -72,22 +72,18 @@ class CountYoutubeViewers(object):
 
 
     def _IsItprivate_2(self):
-        try:
-            WebDriverWait(self.driver, 3).until(
-            EC.presence_of_element_located((By.XPATH, '//yt-live-chat-server-error-message/span[text()="Unable to connect to chat. Please try again later."][@id="message"]'))
-            )
-            return True
-        except:
-            return False
+        element = WebDriverWait(self.driver, 3).until(
+            EC.presence_of_element_located((By.XPATH, '//button[@class="ytp-play-button ytp-button"]'))
+        )
 
+        # data-title-no-tooltip属性の値を取得
+        data_title_no_tooltip = element.get_attribute('data-title-no-tooltip')
 
-    def _IsItprivate_3(self):
-        try:
-            WebDriverWait(self.driver, 3).until(
-                EC.presence_of_element_located((By.XPATH, '//yt-formatted-string[contains(text(), "This video is private")]'))
-            )
+        # 値がReplayと一致するか確認
+        if data_title_no_tooltip == "Replay":
+            # data-title-no-tooltip is 'Replay'
             return True
-        except:
+        else:
             return False
 
 
@@ -115,8 +111,6 @@ class CountYoutubeViewers(object):
             self.driver.quit()
             return None
 
-        if self._IsItprivate_3():
-            return None
 
         # Here is an example of the contents of viewers_str.
         # 1 waiting  Scheduled for Mar 13, 2023
@@ -203,12 +197,8 @@ def isItLiveStream(URL: str) -> List[bool]:
 
 
 if __name__ == "__main__":
-    YT = CountYoutubeViewers("IFDe_Et197A")
-    isend = False
-    while not isend:
-        num = YT.get_viewers()
-        print(num)
-        if num == None:
-            isend = True
-            print("finish")
+    # YT = CountYoutubeViewers("IFDe_Et197A")
+    # isprivate = YT._IsItprivate_2()
+    # print(isprivate)
+    pass
 
