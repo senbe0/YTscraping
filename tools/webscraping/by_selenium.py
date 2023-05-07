@@ -71,6 +71,26 @@ class CountYoutubeViewers(object):
             return False
 
 
+    def _IsItprivate_2(self):
+        try:
+            WebDriverWait(self.driver, 3).until(
+            EC.presence_of_element_located((By.XPATH, '//yt-live-chat-server-error-message/span[text()="Unable to connect to chat. Please try again later."][@id="message"]'))
+            )
+            return True
+        except:
+            return False
+
+
+    def _IsItprivate_3(self):
+        try:
+            WebDriverWait(self.driver, 3).until(
+                EC.presence_of_element_located((By.XPATH, '//yt-formatted-string[contains(text(), "This video is private")]'))
+            )
+            return True
+        except:
+            return False
+
+
     def get_viewers(self):
         self.driver.implicitly_wait(0.5)
 
@@ -89,6 +109,13 @@ class CountYoutubeViewers(object):
 
         if self._IsItprivate():
             self.driver.quit()
+            return None
+
+        if self._IsItprivate_2():
+            self.driver.quit()
+            return None
+
+        if self._IsItprivate_3():
             return None
 
         # Here is an example of the contents of viewers_str.
@@ -176,8 +203,12 @@ def isItLiveStream(URL: str) -> List[bool]:
 
 
 if __name__ == "__main__":
-    # import time
-    # YT = CountYoutubeViewers("")
-    # ans = YT._IsItprivate()
-    # print(ans)
-    pass
+    YT = CountYoutubeViewers("IFDe_Et197A")
+    isend = False
+    while not isend:
+        num = YT.get_viewers()
+        print(num)
+        if num == None:
+            isend = True
+            print("finish")
+
