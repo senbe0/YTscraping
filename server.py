@@ -115,7 +115,7 @@ async def notify(request: Request, response: Response) -> Response:
             excute_subprocess(videoID)
 
             print("Subprocess has benn excuted。")
-  
+
 
     print(isStreamList)
     return Response(status_code=status.HTTP_200_OK, media_type="text/plain")

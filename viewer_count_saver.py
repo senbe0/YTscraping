@@ -49,6 +49,31 @@ def save_viewers_per_minute(videoID):
     count_viewers = by_selenium.CountYoutubeViewers(videoID)
 
     while True:
+        params = {"videoID": f"{table_name}"}
+
+        response = requests.get(databaseAPI_url + "/get_private_bool", params=params)
+        isprivate = response.json()
+        if isprivate:
+            count_viewers.quit_driver()
+            info = {"videoID": videoID}
+            response = requests.post(databaseAPI_url + "/videosDB/delete", json=info)
+            response = response.json()
+            TXstatus = response["status"]
+            if TXstatus == "failure":
+                ErrMsg = response["msg"]
+                logger.error(f"ERR ::delete table from videosDB:: {ErrMsg}")
+
+            info = {"tableName": table_name}
+            response = requests.post(databaseAPI_url + "/viewersDB/delete", json=info)
+            response = response.json()
+            TXstatus = response["status"]
+            if TXstatus == "failure":
+                ErrMsg = response["msg"]
+                logger.error(f"ERR ::delete table from viewersDB:: {ErrMsg}")
+
+            break
+
+
         data = count_viewers.get_viewers()
 
         if not data:

@@ -30,6 +30,11 @@ class CountYoutubeViewers(object):
         self.driver.get(self.videoURL)
 
 
+    def quit_driver(self):
+        self.driver.quit()
+        return None
+
+
     # If the youtube live feed is deleted, the DRIVER will be terminated.
     def _IsVideoExist(self):
         try:
@@ -61,32 +66,6 @@ class CountYoutubeViewers(object):
             return False
 
 
-    def _IsItprivate(self):
-        try:
-            WebDriverWait(self.driver, 3).until(
-                EC.presence_of_element_located((By.XPATH, '//div[contains(@class, "ytp-error-content-wrap-reason")]/span[text()="Video unavailable"]'))
-            )
-            return True
-        except:
-            return False
-
-
-    def _IsItprivate_2(self):
-        element = WebDriverWait(self.driver, 3).until(
-            EC.presence_of_element_located((By.XPATH, '//button[@class="ytp-play-button ytp-button"]'))
-        )
-
-        # data-title-no-tooltip属性の値を取得
-        data_title_no_tooltip = element.get_attribute('data-title-no-tooltip')
-
-        # 値がReplayと一致するか確認
-        if data_title_no_tooltip == "Replay":
-            # data-title-no-tooltip is 'Replay'
-            return True
-        else:
-            return False
-
-
     def get_viewers(self):
         self.driver.implicitly_wait(0.5)
 
@@ -102,15 +81,6 @@ class CountYoutubeViewers(object):
         if self._IsItMemberOnly():
             self.driver.quit()
             return None
-
-        if self._IsItprivate():
-            self.driver.quit()
-            return None
-
-        if self._IsItprivate_2():
-            self.driver.quit()
-            return None
-
 
         # Here is an example of the contents of viewers_str.
         # 1 waiting  Scheduled for Mar 13, 2023
