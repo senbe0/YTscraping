@@ -49,10 +49,13 @@ def save_viewers_per_minute(videoID):
     count_viewers = by_selenium.CountYoutubeViewers(videoID)
 
     while True:
-        params = {"videoID": f"{table_name}"}
-
-        response = requests.get(databaseAPI_url + "/get_private_bool", params=params)
-        isprivate = response.json()
+        params = {"videoID": f"{videoID}"}
+        try:
+            response = requests.get(databaseAPI_url + "/get_private_bool", params=params)
+            isprivate = response.json()
+        except Exception as e:
+            isprivate = False
+            logger.error(f"ERR :: dataAPI failure :: {e}")
         if isprivate:
             count_viewers.quit_driver()
             info = {"videoID": videoID}
