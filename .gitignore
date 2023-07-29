@@ -1,5 +1,6 @@
 /.env
 /app.log
+/auto_add_video.log
 /__pycache__/
 /tools/database/__pycache__/
 /tools/webscraping/__pycache__/

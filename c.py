@@ -3,11 +3,11 @@ import requests
 import sys
 import os
 
-videoID = ""
-channelID = ""
-videoTitle = ""
-videoURL = ""
-iconImageURL = ""
+videoID = "i39BsiL5L-E"
+channelID = "UCTvHWSfBZgtxE4sILOaurIQ"
+videoTitle = "【Back 4 Blood】introducing: my very confusing pov"
+videoURL = "https://www.youtube.com/watch?v=i39BsiL5L-E"
+iconImageURL = "https://yt3.ggpht.com/-IdVo-vK7pr0VRjJDdza1-t1Edjce1Rd1R1hon_3SRIzuQ-XVBTWOJj-UfwYPp8y40KM197_y4o=s48-c-k-c0x00ffffff-no-rj"
 
 databaseAPI_url =  "http://localhost:8015"
 
